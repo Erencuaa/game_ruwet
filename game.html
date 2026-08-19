@@ -1,0 +1,2923 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               user-scalable=no,
+               viewport-fit=cover">
+
+<title>🏁 BALAP RUWET</title>
+
+<style>
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    touch-action: none;
+}
+
+body {
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            #555 0%,
+            #181818 35%,
+            #030303 80%
+        );
+
+    color: white;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   JUDUL
+========================================================= */
+
+h1 {
+    margin: 6px 0 5px;
+
+    color: #ffd400;
+
+    font-size:
+        clamp(21px, 6vw, 30px);
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+    text-shadow:
+        0 0 7px #ffae00,
+        0 0 15px #ff4d00,
+        0 0 28px #ff0000;
+}
+
+
+/* =========================================================
+   HUD
+========================================================= */
+
+#hud {
+    position: relative;
+
+    width:
+        min(
+            calc(100vw - 20px),
+            430px
+        );
+
+    min-height: 48px;
+
+    margin: 5px auto 7px;
+
+    padding:
+        7px 11px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content:
+        space-between;
+
+    gap: 6px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(50,50,50,.98),
+            rgba(12,12,12,.98)
+        );
+
+    border:
+        1px solid #666;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,.55),
+        inset 0 1px rgba(255,255,255,.12);
+
+    font-size:
+        clamp(12px, 3.5vw, 15px);
+
+    font-weight: 800;
+}
+
+.hudItem {
+    flex: 1;
+
+    padding: 4px;
+
+    white-space: nowrap;
+}
+
+.hudValue {
+    color: #ffd400;
+}
+
+
+/* =========================================================
+   GAME
+========================================================= */
+
+#game {
+    position: relative;
+
+    width:
+        min(
+            calc(100vw - 20px),
+            430px
+        );
+
+    /*
+       Mengikuti tinggi layar HP.
+    */
+
+    height:
+        min(
+            calc(100dvh - 190px),
+            650px
+        );
+
+    min-height: 430px;
+
+    margin: 0 auto;
+
+    overflow: hidden;
+
+    border:
+        5px solid #eee;
+
+    border-radius: 14px;
+
+    background: #333;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.7);
+
+    touch-action: none;
+}
+
+
+/* =========================================================
+   JALAN
+========================================================= */
+
+#road {
+    position: absolute;
+
+    inset: 0;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            90deg,
+
+            #075c17 0%,
+            #1d8a29 7%,
+
+            #303030 7%,
+            #3b3b3b 50%,
+            #303030 93%,
+
+            #1d8a29 93%,
+            #075c17 100%
+        );
+}
+
+
+/* tekstur aspal */
+
+#road::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: .45;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            transparent 0,
+            transparent 34px,
+            rgba(255,255,255,.025) 35px,
+            transparent 37px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            transparent 0,
+            transparent 27px,
+            rgba(0,0,0,.08) 28px
+        );
+}
+
+
+/* =========================================================
+   GARIS TENGAH
+========================================================= */
+
+#road::before {
+    content: "";
+
+    position: absolute;
+
+    z-index: 1;
+
+    top: 0;
+    bottom: 0;
+
+    left: 50%;
+
+    width: 7px;
+
+    transform:
+        translateX(-50%);
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+
+            #fff 0,
+            #fff 65px,
+
+            transparent 65px,
+            transparent 150px
+        );
+
+    animation:
+        roadMove .95s linear infinite;
+}
+
+@keyframes roadMove {
+    from {
+        background-position-y: 0;
+    }
+
+    to {
+        background-position-y: 150px;
+    }
+}
+
+
+/* =========================================================
+   GARIS TEPI
+========================================================= */
+
+.roadEdge {
+    position: absolute;
+
+    z-index: 3;
+
+    top: 0;
+    bottom: 0;
+
+    width: 5px;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+
+            white 0,
+            white 55px,
+
+            #e00000 55px,
+            #e00000 110px
+        );
+
+    animation:
+        edgeMove .9s linear infinite;
+}
+
+.roadEdge.left {
+    left: 7%;
+}
+
+.roadEdge.right {
+    right: 7%;
+}
+
+@keyframes edgeMove {
+    from {
+        background-position-y: 0;
+    }
+
+    to {
+        background-position-y: 110px;
+    }
+}
+
+
+/* =========================================================
+   POHON
+========================================================= */
+
+.tree {
+    position: absolute;
+
+    z-index: 4;
+
+    width: 48px;
+    height: 90px;
+
+    pointer-events: none;
+
+    animation:
+        treeMove linear infinite;
+}
+
+.tree::after {
+    content: "";
+
+    position: absolute;
+
+    left: 20px;
+    bottom: 0;
+
+    width: 9px;
+    height: 42px;
+
+    border-radius: 4px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #351505,
+            #9a5220,
+            #351505
+        );
+}
+
+.leaf {
+    position: absolute;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle at 30% 25%,
+            #9aff91,
+            #18a82e 45%,
+            #064d14 82%
+        );
+
+    box-shadow:
+        0 4px 6px rgba(0,0,0,.7);
+}
+
+.leaf.one {
+    left: 3px;
+    top: 7px;
+}
+
+.leaf.two {
+    left: 16px;
+    top: 0;
+}
+
+.leaf.three {
+    left: 1px;
+    top: 29px;
+}
+
+@keyframes treeMove {
+    from {
+        transform:
+            translateY(-150px);
+    }
+
+    to {
+        transform:
+            translateY(750px);
+    }
+}
+
+.tree1 {
+    left: 0;
+    animation-duration: 3.8s;
+}
+
+.tree2 {
+    right: 0;
+    animation-duration: 4.2s;
+    animation-delay: -1.4s;
+}
+
+.tree3 {
+    left: -2px;
+    transform: scale(.72);
+    animation-duration: 5s;
+    animation-delay: -3s;
+}
+
+.tree4 {
+    right: -2px;
+    transform: scale(.72);
+    animation-duration: 4.7s;
+    animation-delay: -2.5s;
+}
+
+
+/* =========================================================
+   MOBIL
+========================================================= */
+
+.car {
+    position: absolute;
+
+    width: 58px;
+    height: 94px;
+
+    border-radius: 17px;
+
+    z-index: 10;
+
+    pointer-events: none;
+
+    filter:
+        drop-shadow(
+            0 5px 4px rgba(0,0,0,.7)
+        );
+}
+
+.carBody {
+    position: absolute;
+
+    inset: 0;
+
+    overflow: hidden;
+
+    border-radius: 17px;
+
+    border:
+        2px solid
+        rgba(255,255,255,.42);
+}
+
+
+/* =========================================================
+   BODY DETAIL
+========================================================= */
+
+.hood {
+    position: absolute;
+
+    left: 8px;
+    top: 3px;
+
+    width: 42px;
+    height: 25px;
+
+    border-radius:
+        15px 15px 7px 7px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.35),
+            rgba(0,0,0,.08)
+        );
+}
+
+.window {
+    position: absolute;
+
+    left: 8px;
+    top: 25px;
+
+    width: 42px;
+    height: 29px;
+
+    border-radius:
+        9px 9px 6px 6px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f5ffff,
+            #72cee5 45%,
+            #16394f
+        );
+
+    border: 2px solid #111;
+
+    box-shadow:
+        inset 0 0 5px white;
+}
+
+.window::after {
+    content: "";
+
+    position: absolute;
+
+    left: 18px;
+    top: 0;
+
+    width: 2px;
+    height: 100%;
+
+    background:
+        rgba(0,0,0,.5);
+}
+
+.backWindow {
+    position: absolute;
+
+    left: 11px;
+    bottom: 15px;
+
+    width: 36px;
+    height: 14px;
+
+    border-radius:
+        5px 5px 8px 8px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #17495f,
+            #8ae8f7
+        );
+
+    border: 2px solid #111;
+}
+
+.carLine {
+    position: absolute;
+
+    left: 3px;
+    right: 3px;
+
+    top: 58px;
+
+    height: 3px;
+
+    background:
+        rgba(255,255,255,.25);
+}
+
+
+/* =========================================================
+   LAMPU
+========================================================= */
+
+.headlight {
+    position: absolute;
+
+    top: 6px;
+
+    width: 11px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            white,
+            #bffcff,
+            #00bfff
+        );
+
+    box-shadow:
+        0 0 8px #00eaff;
+}
+
+.headlight.left {
+    left: 8px;
+}
+
+.headlight.right {
+    right: 8px;
+}
+
+.taillight {
+    position: absolute;
+
+    bottom: 5px;
+
+    width: 13px;
+    height: 6px;
+
+    border-radius: 5px;
+
+    background: #ff0909;
+
+    box-shadow:
+        0 0 7px red;
+}
+
+.taillight.left {
+    left: 7px;
+}
+
+.taillight.right {
+    right: 7px;
+}
+
+
+/* =========================================================
+   BUMPER
+========================================================= */
+
+.bumper {
+    position: absolute;
+
+    bottom: 0;
+    left: 6px;
+
+    width: 46px;
+    height: 8px;
+
+    border-radius:
+        0 0 9px 9px;
+
+    background:
+        linear-gradient(
+            #222,
+            #050505
+        );
+}
+
+.plate {
+    position: absolute;
+
+    bottom: 8px;
+    left: 18px;
+
+    width: 22px;
+    height: 7px;
+
+    background: white;
+
+    border-radius: 2px;
+
+    color: #111;
+
+    font-size: 5px;
+    font-weight: bold;
+
+    line-height: 7px;
+}
+
+.spoiler {
+    position: absolute;
+
+    left: 5px;
+    bottom: -3px;
+
+    width: 48px;
+    height: 7px;
+
+    background: #111;
+
+    border-radius: 4px;
+}
+
+
+/* =========================================================
+   RODA
+========================================================= */
+
+.wheel {
+    position: absolute;
+
+    width: 10px;
+    height: 25px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #050505,
+            #222,
+            #050505
+        );
+
+    border-radius: 5px;
+
+    z-index: -1;
+}
+
+.wheel::after {
+    content: "";
+
+    position: absolute;
+
+    left: 2px;
+    top: 5px;
+
+    width: 6px;
+    height: 15px;
+
+    border-radius: 4px;
+
+    background:
+        linear-gradient(
+            #aaa,
+            #333,
+            #aaa
+        );
+}
+
+.frontLeft {
+    left: -7px;
+    top: 18px;
+}
+
+.frontRight {
+    right: -7px;
+    top: 18px;
+}
+
+.backLeft {
+    left: -7px;
+    bottom: 18px;
+}
+
+.backRight {
+    right: -7px;
+    bottom: 18px;
+}
+
+
+/* =========================================================
+   PEMAIN
+========================================================= */
+
+.playerCar {
+    box-shadow:
+        0 0 12px red,
+        0 0 28px
+        rgba(255,50,0,.6);
+}
+
+.playerCar .carBody {
+    background:
+        linear-gradient(
+            90deg,
+            #650000,
+            #ed0000 30%,
+            #ff6800 50%,
+            #e90000 70%,
+            #650000
+        );
+
+    box-shadow:
+        inset 0 0 10px
+        rgba(255,255,255,.25);
+}
+
+
+/* =========================================================
+   MUSUH
+========================================================= */
+
+.enemyBlue .carBody {
+    background:
+        linear-gradient(
+            90deg,
+            #001d77,
+            #006cff 35%,
+            #19d9ff 50%,
+            #006cff 70%,
+            #001d77
+        );
+}
+
+.enemyYellow .carBody {
+    background:
+        linear-gradient(
+            90deg,
+            #8a3e00,
+            #ff9d00 35%,
+            #fff000 50%,
+            #ff9d00 70%,
+            #8a3e00
+        );
+}
+
+.enemyPurple .carBody {
+    background:
+        linear-gradient(
+            90deg,
+            #35005e,
+            #8d00ff 35%,
+            #ed64ff 50%,
+            #8d00ff 70%,
+            #35005e
+        );
+}
+
+
+/* =========================================================
+   NITRO BAR
+========================================================= */
+
+#nitroBar {
+    position: absolute;
+
+    z-index: 30;
+
+    left: 10px;
+    bottom: 10px;
+
+    width: 112px;
+    height: 14px;
+
+    overflow: hidden;
+
+    background: #111;
+
+    border: 2px solid white;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 2px 7px black;
+}
+
+#nitro {
+    width: 100%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #0077ff,
+            #00ffff,
+            white
+        );
+
+    border-radius: 10px;
+
+    transition:
+        width .08s linear;
+}
+
+
+/* =========================================================
+   EFEK NITRO
+========================================================= */
+
+.nitroGlow {
+    animation:
+        nitroPulse .12s infinite alternate;
+}
+
+@keyframes nitroPulse {
+    from {
+        filter:
+            drop-shadow(
+                0 0 5px #00eaff
+            );
+    }
+
+    to {
+        filter:
+            drop-shadow(
+                0 0 20px #00eaff
+            );
+    }
+}
+
+
+/* =========================================================
+   PAUSE
+========================================================= */
+
+#pauseButton {
+    position: absolute;
+
+    z-index: 40;
+
+    right: 10px;
+    bottom: 10px;
+
+    width: 42px;
+    height: 42px;
+
+    padding: 0;
+
+    font-size: 18px;
+
+    background:
+        linear-gradient(
+            #444,
+            #111
+        );
+
+    color: white;
+
+    border:
+        1px solid #777;
+
+    box-shadow:
+        0 3px 0 #000;
+}
+
+
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+.overlay {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 100;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 20px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,80,0,.18),
+            rgba(0,0,0,.95)
+        );
+
+    backdrop-filter:
+        blur(3px);
+}
+
+#gameOver,
+#pauseScreen {
+    display: none;
+}
+
+.overlay h2 {
+    font-size:
+        clamp(28px, 9vw, 38px);
+
+    color: #ffd400;
+
+    text-shadow:
+        0 0 10px orange,
+        0 0 20px red;
+}
+
+.overlay p {
+    color: #ddd;
+
+    font-size: 14px;
+}
+
+.bigScore {
+    font-size: 45px !important;
+
+    color: white !important;
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+button {
+    border: none;
+
+    border-radius: 13px;
+
+    padding:
+        13px 24px;
+
+    background:
+        linear-gradient(
+            #ffe600,
+            #ff9900
+        );
+
+    color: #111;
+
+    font-size: 17px;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 0 #a85e00;
+
+    touch-action: none;
+
+    -webkit-tap-highlight-color:
+        transparent;
+}
+
+button:active {
+    transform:
+        translateY(4px);
+
+    box-shadow:
+        0 1px 0 #a85e00;
+}
+
+
+/* =========================================================
+   KONTROL HP
+========================================================= */
+
+#controls {
+    width:
+        min(
+            calc(100vw - 20px),
+            430px
+        );
+
+    margin:
+        7px auto 0;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr 1fr;
+
+    gap: 9px;
+}
+
+.control {
+    width: 100%;
+    height: 56px;
+
+    padding: 0;
+
+    font-size: 25px;
+
+    border-radius: 15px;
+
+    touch-action: none;
+
+    -webkit-tap-highlight-color:
+        transparent;
+}
+
+#nitroButton {
+    background:
+        linear-gradient(
+            #00eaff,
+            #006eff
+        );
+
+    color: white;
+
+    box-shadow:
+        0 5px 0 #004caa;
+}
+
+#nitroButton:active {
+    box-shadow:
+        0 1px 0 #004caa;
+}
+
+
+/* =========================================================
+   INFO
+========================================================= */
+
+.info {
+    margin-top: 5px;
+
+    color: #777;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   RESPONSIVE HP KECIL
+========================================================= */
+
+@media (max-height: 650px) {
+
+    h1 {
+        margin: 3px 0;
+        font-size: 21px;
+    }
+
+    #hud {
+        min-height: 40px;
+        margin-bottom: 4px;
+        padding: 5px 8px;
+    }
+
+    #game {
+        height:
+            calc(100dvh - 160px);
+
+        min-height: 380px;
+    }
+
+    #controls {
+        margin-top: 5px;
+    }
+
+    .control {
+        height: 48px;
+    }
+
+    .info {
+        display: none;
+    }
+}
+
+
+/* =========================================================
+   HP SANGAT KECIL
+========================================================= */
+
+@media (max-height: 530px) {
+
+    #game {
+        height:
+            calc(100dvh - 125px);
+
+        min-height: 330px;
+    }
+
+    #controls {
+        margin-top: 3px;
+    }
+
+    .control {
+        height: 42px;
+    }
+
+    h1 {
+        display: none;
+    }
+}
+
+
+/* =========================================================
+   FLASH TABRAKAN
+========================================================= */
+
+.crashFlash {
+    animation:
+        crashFlash .18s 3;
+}
+
+@keyframes crashFlash {
+
+    0% {
+        filter:
+            brightness(1);
+    }
+
+    50% {
+        filter:
+            brightness(3)
+            saturate(2);
+    }
+
+    100% {
+        filter:
+            brightness(1);
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+<h1>🏁 BALAP RUWET 🏁</h1>
+
+
+<!-- =======================================================
+     HUD
+======================================================= -->
+
+<div id="hud">
+
+    <div class="hudItem">
+        🏆
+        <span
+            id="score"
+            class="hudValue">
+            0
+        </span>
+    </div>
+
+    <div class="hudItem">
+        ⚡ Lv.
+        <span
+            id="level"
+            class="hudValue">
+            1
+        </span>
+    </div>
+
+    <div class="hudItem">
+        🚀
+        <span
+            id="speed"
+            class="hudValue">
+            1
+        </span>x
+    </div>
+
+    <div class="hudItem">
+        🥇
+        <span
+            id="highScore"
+            class="hudValue">
+            0
+        </span>
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     GAME
+======================================================= -->
+
+<div id="game">
+
+    <div id="road">
+
+        <!-- POHON -->
+
+        <div class="tree tree1">
+            <div class="leaf one"></div>
+            <div class="leaf two"></div>
+            <div class="leaf three"></div>
+        </div>
+
+        <div class="tree tree2">
+            <div class="leaf one"></div>
+            <div class="leaf two"></div>
+            <div class="leaf three"></div>
+        </div>
+
+        <div class="tree tree3">
+            <div class="leaf one"></div>
+            <div class="leaf two"></div>
+            <div class="leaf three"></div>
+        </div>
+
+        <div class="tree tree4">
+            <div class="leaf one"></div>
+            <div class="leaf two"></div>
+            <div class="leaf three"></div>
+        </div>
+
+        <!-- GARIS JALAN -->
+
+        <div class="roadEdge left"></div>
+        <div class="roadEdge right"></div>
+
+    </div>
+
+
+    <!-- ===================================================
+         PLAYER
+    =================================================== -->
+
+    <div
+        id="player"
+        class="car playerCar"
+        style="
+            left: 50%;
+            bottom: 25px;
+            transform: translateX(-50%);
+        "
+    >
+
+        <div class="wheel frontLeft"></div>
+        <div class="wheel frontRight"></div>
+        <div class="wheel backLeft"></div>
+        <div class="wheel backRight"></div>
+
+        <div class="carBody">
+
+            <div class="hood"></div>
+
+            <div class="window"></div>
+
+            <div class="backWindow"></div>
+
+            <div class="carLine"></div>
+
+            <div class="headlight left"></div>
+            <div class="headlight right"></div>
+
+            <div class="taillight left"></div>
+            <div class="taillight right"></div>
+
+            <div class="bumper"></div>
+
+            <div class="plate">
+                RWET
+            </div>
+
+            <div class="spoiler"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         NITRO
+    =================================================== -->
+
+    <div id="nitroBar">
+        <div id="nitro"></div>
+    </div>
+
+
+    <!-- ===================================================
+         PAUSE
+    =================================================== -->
+
+    <button
+        id="pauseButton"
+        aria-label="Pause">
+        ⏸
+    </button>
+
+
+    <!-- ===================================================
+         START
+    =================================================== -->
+
+    <div
+        id="startScreen"
+        class="overlay">
+
+        <h2>
+            🏎️ BALAP RUWET
+        </h2>
+
+        <p>
+            Hindari mobil lawan!
+        </p>
+
+        <p>
+            👆 Geser layar atau tahan tombol
+            kiri / kanan
+        </p>
+
+        <p>
+            🚀 Tahan tombol nitro untuk
+            melaju cepat
+        </p>
+
+        <button
+            id="startButton">
+
+            MULAI BALAP
+
+        </button>
+
+    </div>
+
+
+    <!-- ===================================================
+         PAUSE SCREEN
+    =================================================== -->
+
+    <div
+        id="pauseScreen"
+        class="overlay">
+
+        <h2>
+            ⏸️ PAUSE
+        </h2>
+
+        <p>
+            Balapan dihentikan sementara
+        </p>
+
+        <button
+            id="resumeButton">
+
+            ▶️ LANJUT
+
+        </button>
+
+    </div>
+
+
+    <!-- ===================================================
+         GAME OVER
+    =================================================== -->
+
+    <div
+        id="gameOver"
+        class="overlay">
+
+        <h2>
+            💥 GAME OVER!
+        </h2>
+
+        <p>
+            Skor kamu:
+        </p>
+
+        <h1
+            id="finalScore"
+            class="bigScore">
+
+            0
+
+        </h1>
+
+        <p>
+            Rekor:
+            <b id="finalHighScore">
+                0
+            </b>
+        </p>
+
+        <button
+            id="restartButton">
+
+            🔄 MAIN LAGI
+
+        </button>
+
+        <p>
+            ENTER / SPACE = Main lagi
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     KONTROL
+======================================================= -->
+
+<div id="controls">
+
+    <button
+        class="control"
+        id="leftButton">
+
+        ⬅️
+
+    </button>
+
+    <button
+        class="control"
+        id="nitroButton">
+
+        🚀
+
+    </button>
+
+    <button
+        class="control"
+        id="rightButton">
+
+        ➡️
+
+    </button>
+
+</div>
+
+
+<div class="info">
+
+    A / D atau ← / → • Swipe untuk belok •
+    SHIFT = Nitro • ESC = Pause
+
+</div>
+
+
+<script>
+/* =========================================================
+   ELEMENT
+========================================================= */
+
+const game =
+    document.getElementById("game");
+
+const player =
+    document.getElementById("player");
+
+const scoreText =
+    document.getElementById("score");
+
+const levelText =
+    document.getElementById("level");
+
+const speedText =
+    document.getElementById("speed");
+
+const highScoreText =
+    document.getElementById("highScore");
+
+const nitroBar =
+    document.getElementById("nitro");
+
+const startScreen =
+    document.getElementById("startScreen");
+
+const gameOver =
+    document.getElementById("gameOver");
+
+const pauseScreen =
+    document.getElementById("pauseScreen");
+
+const finalScore =
+    document.getElementById("finalScore");
+
+const finalHighScore =
+    document.getElementById("finalHighScore");
+
+const pauseButton =
+    document.getElementById("pauseButton");
+
+const resumeButton =
+    document.getElementById("resumeButton");
+
+const startButton =
+    document.getElementById("startButton");
+
+const restartButton =
+    document.getElementById("restartButton");
+
+const leftButton =
+    document.getElementById("leftButton");
+
+const rightButton =
+    document.getElementById("rightButton");
+
+const nitroButton =
+    document.getElementById("nitroButton");
+
+
+/* =========================================================
+   GAME STATE
+========================================================= */
+
+let running = false;
+
+let paused = false;
+
+let score = 0;
+
+let level = 1;
+
+let baseSpeed = 5;
+
+let playerX = 0;
+
+let targetX = 0;
+
+let nitroAmount = 100;
+
+let nitroActive = false;
+
+let enemies = [];
+
+let lastTime = 0;
+
+let spawnTimer = 0;
+
+let animation = null;
+
+let moveLeft = false;
+
+let moveRight = false;
+
+
+/* =========================================================
+   KONSTANTA
+========================================================= */
+
+const PLAYER_WIDTH = 58;
+
+const PLAYER_MOVE_SPEED = 8;
+
+const HIGH_SCORE_KEY =
+    "balap_ruwet_highscore";
+
+
+/* =========================================================
+   HIGH SCORE
+========================================================= */
+
+let highScore =
+    Number(
+        localStorage.getItem(
+            HIGH_SCORE_KEY
+        )
+    ) || 0;
+
+highScoreText.textContent =
+    highScore;
+
+
+/* =========================================================
+   START GAME
+========================================================= */
+
+function startGame() {
+
+    cancelAnimationFrame(animation);
+
+    clearEnemies();
+
+    score = 0;
+
+    level = 1;
+
+    baseSpeed = 5;
+
+    nitroAmount = 100;
+
+    nitroActive = false;
+
+    running = true;
+
+    paused = false;
+
+    lastTime = 0;
+
+    spawnTimer = 0;
+
+    moveLeft = false;
+
+    moveRight = false;
+
+
+    /*
+       Posisi awal tengah.
+    */
+
+    targetX =
+        game.clientWidth / 2 -
+        PLAYER_WIDTH / 2;
+
+    playerX =
+        targetX;
+
+    player.style.left =
+        playerX + "px";
+
+    player.style.transform =
+        "none";
+
+
+    player.style.bottom =
+        "25px";
+
+    player.style.top =
+        "auto";
+
+
+    player.classList.remove(
+        "nitroGlow"
+    );
+
+    updateHUD();
+
+
+    startScreen.style.display =
+        "none";
+
+    gameOver.style.display =
+        "none";
+
+    pauseScreen.style.display =
+        "none";
+
+
+    animation =
+        requestAnimationFrame(
+            gameLoop
+        );
+}
+
+
+/* =========================================================
+   CLEAR ENEMIES
+========================================================= */
+
+function clearEnemies() {
+
+    enemies.forEach(
+        enemy => {
+
+            if (enemy.el) {
+                enemy.el.remove();
+            }
+
+        }
+    );
+
+    enemies = [];
+}
+
+
+/* =========================================================
+   BATAS PEMAIN
+========================================================= */
+
+function setPlayerX(x) {
+
+    const minX = 28;
+
+    const maxX =
+        game.clientWidth -
+        PLAYER_WIDTH -
+        28;
+
+    targetX =
+        Math.max(
+            minX,
+            Math.min(
+                maxX,
+                x
+            )
+        );
+}
+
+
+/* =========================================================
+   KONTROL
+========================================================= */
+
+function continuousMovement(delta) {
+
+    if (!running || paused)
+        return;
+
+    const movement =
+        PLAYER_MOVE_SPEED *
+        delta /
+        16;
+
+
+    if (moveLeft) {
+
+        setPlayerX(
+            targetX -
+            movement
+        );
+    }
+
+
+    if (moveRight) {
+
+        setPlayerX(
+            targetX +
+            movement
+        );
+    }
+}
+
+
+/* =========================================================
+   NITRO
+========================================================= */
+
+function startNitro() {
+
+    if (
+        running &&
+        !paused &&
+        nitroAmount > 2
+    ) {
+
+        nitroActive = true;
+
+        player.classList.add(
+            "nitroGlow"
+        );
+    }
+}
+
+
+function stopNitro() {
+
+    nitroActive = false;
+
+    player.classList.remove(
+        "nitroGlow"
+    );
+}
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        const key =
+            event.key.toLowerCase();
+
+
+        if (
+            key === "arrowleft" ||
+            key === "a"
+        ) {
+
+            event.preventDefault();
+
+            moveLeft = true;
+        }
+
+
+        if (
+            key === "arrowright" ||
+            key === "d"
+        ) {
+
+            event.preventDefault();
+
+            moveRight = true;
+        }
+
+
+        if (key === "shift") {
+
+            event.preventDefault();
+
+            startNitro();
+        }
+
+
+        if (key === "escape") {
+
+            event.preventDefault();
+
+            togglePause();
+        }
+
+
+        if (
+            !running &&
+            (
+                key === "enter" ||
+                key === " "
+            )
+        ) {
+
+            startGame();
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    "keyup",
+    event => {
+
+        const key =
+            event.key.toLowerCase();
+
+
+        if (
+            key === "arrowleft" ||
+            key === "a"
+        ) {
+
+            moveLeft = false;
+        }
+
+
+        if (
+            key === "arrowright" ||
+            key === "d"
+        ) {
+
+            moveRight = false;
+        }
+
+
+        if (key === "shift") {
+
+            stopNitro();
+        }
+
+    }
+);
+
+
+/* =========================================================
+   MOBILE BUTTON HELPER
+========================================================= */
+
+function setupHoldButton(
+    button,
+    onStart,
+    onEnd
+) {
+
+    button.addEventListener(
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            onStart();
+
+            try {
+                button.setPointerCapture(
+                    event.pointerId
+                );
+            } catch {}
+        }
+    );
+
+
+    button.addEventListener(
+        "pointerup",
+        event => {
+
+            event.preventDefault();
+
+            onEnd();
+        }
+    );
+
+
+    button.addEventListener(
+        "pointercancel",
+        onEnd
+    );
+
+
+    button.addEventListener(
+        "pointerleave",
+        event => {
+
+            if (
+                event.buttons === 0
+            ) {
+
+                onEnd();
+            }
+        }
+    );
+}
+
+
+setupHoldButton(
+    leftButton,
+
+    () => {
+        if (running && !paused) {
+            moveLeft = true;
+        }
+    },
+
+    () => {
+        moveLeft = false;
+    }
+);
+
+
+setupHoldButton(
+    rightButton,
+
+    () => {
+        if (running && !paused) {
+            moveRight = true;
+        }
+    },
+
+    () => {
+        moveRight = false;
+    }
+);
+
+
+setupHoldButton(
+    nitroButton,
+
+    startNitro,
+
+    stopNitro
+);
+
+
+/* =========================================================
+   SWIPE / TOUCH CONTROL
+========================================================= */
+
+let touchStartX = 0;
+
+let touchActive = false;
+
+
+game.addEventListener(
+    "pointerdown",
+    event => {
+
+        /*
+           Jangan menganggap tombol UI
+           sebagai kontrol swipe.
+        */
+
+        if (
+            event.target.closest(
+                "button"
+            )
+        ) {
+            return;
+        }
+
+
+        if (!running || paused)
+            return;
+
+
+        touchStartX =
+            event.clientX;
+
+        touchActive = true;
+
+
+        try {
+            game.setPointerCapture(
+                event.pointerId
+            );
+        } catch {}
+    }
+);
+
+
+game.addEventListener(
+    "pointermove",
+    event => {
+
+        if (
+            !touchActive ||
+            !running ||
+            paused
+        ) {
+            return;
+        }
+
+
+        const dx =
+            event.clientX -
+            touchStartX;
+
+
+        /*
+           Kontrol langsung berdasarkan
+           posisi jari.
+        */
+
+        setPlayerX(
+            targetX +
+            dx * .65
+        );
+
+
+        touchStartX =
+            event.clientX;
+    }
+);
+
+
+function endTouch() {
+
+    touchActive = false;
+}
+
+
+game.addEventListener(
+    "pointerup",
+    endTouch
+);
+
+game.addEventListener(
+    "pointercancel",
+    endTouch
+);
+
+
+/* =========================================================
+   CREATE ENEMY
+========================================================= */
+
+function createEnemy() {
+
+    const el =
+        document.createElement(
+            "div"
+        );
+
+
+    el.className =
+        "car";
+
+
+    const colors = [
+        "enemyBlue",
+        "enemyYellow",
+        "enemyPurple"
+    ];
+
+
+    el.classList.add(
+        colors[
+            Math.floor(
+                Math.random() *
+                colors.length
+            )
+        ]
+    );
+
+
+    let y = -120;
+
+
+    const center =
+        game.clientWidth / 2;
+
+
+    const lanes = [
+        center - 106,
+        center,
+        center + 106
+    ];
+
+
+    let x =
+        lanes[
+            Math.floor(
+                Math.random() *
+                lanes.length
+            )
+        ] - 29;
+
+
+    const startX = x;
+
+
+    const directionX =
+        Math.random() < .5
+            ? -1
+            : 1;
+
+
+    const horizontalSpeed =
+        .3 +
+        Math.random() * .7;
+
+
+    const moveRange =
+        15 +
+        Math.random() * 30;
+
+
+    el.innerHTML = `
+
+        <div class="wheel frontLeft"></div>
+        <div class="wheel frontRight"></div>
+        <div class="wheel backLeft"></div>
+        <div class="wheel backRight"></div>
+
+        <div class="carBody">
+
+            <div class="hood"></div>
+
+            <div class="window"></div>
+
+            <div class="backWindow"></div>
+
+            <div class="carLine"></div>
+
+            <div class="headlight left"></div>
+            <div class="headlight right"></div>
+
+            <div class="taillight left"></div>
+            <div class="taillight right"></div>
+
+            <div class="bumper"></div>
+
+            <div class="plate">
+                BRW
+            </div>
+
+            <div class="spoiler"></div>
+
+        </div>
+    `;
+
+
+    el.style.left =
+        x + "px";
+
+    el.style.top =
+        y + "px";
+
+
+    game.appendChild(el);
+
+
+    enemies.push({
+
+        el,
+
+        x,
+
+        y,
+
+        directionX,
+
+        horizontalSpeed,
+
+        moveRange,
+
+        startX,
+
+        speed:
+            .85 +
+            Math.random() * .35
+
+    });
+}
+
+
+/* =========================================================
+   COLLISION
+========================================================= */
+
+function hitTest(a, b) {
+
+    const A =
+        a.getBoundingClientRect();
+
+    const B =
+        b.getBoundingClientRect();
+
+
+    const padding = 8;
+
+
+    return !(
+        A.right - padding <
+        B.left + padding ||
+
+        A.left + padding >
+        B.right - padding ||
+
+        A.bottom - padding <
+        B.top + padding ||
+
+        A.top + padding >
+        B.bottom - padding
+    );
+}
+
+
+/* =========================================================
+   HUD
+========================================================= */
+
+function updateHUD() {
+
+    scoreText.textContent =
+        score;
+
+    levelText.textContent =
+        level;
+
+
+    speedText.textContent =
+        nitroActive
+            ? "2"
+            : Math.max(
+                1,
+                Math.floor(
+                    baseSpeed / 5
+                )
+            );
+
+
+    highScoreText.textContent =
+        highScore;
+
+
+    nitroBar.style.width =
+        nitroAmount + "%";
+}
+
+
+/* =========================================================
+   GAME LOOP
+========================================================= */
+
+function gameLoop(time) {
+
+    if (!running)
+        return;
+
+
+    if (paused) {
+
+        animation =
+            requestAnimationFrame(
+                gameLoop
+            );
+
+        return;
+    }
+
+
+    if (!lastTime) {
+
+        lastTime =
+            time;
+    }
+
+
+    const delta =
+        Math.min(
+            time - lastTime,
+            35
+        );
+
+
+    lastTime =
+        time;
+
+
+    /* =====================================================
+       PLAYER
+    ===================================================== */
+
+    continuousMovement(
+        delta
+    );
+
+
+    /*
+       Smooth movement.
+    */
+
+    playerX +=
+        (
+            targetX -
+            playerX
+        ) * .25;
+
+
+    player.style.left =
+        playerX + "px";
+
+
+    player.style.bottom =
+        "25px";
+
+
+    player.style.top =
+        "auto";
+
+
+    /* =====================================================
+       SPEED
+    ===================================================== */
+
+    let currentSpeed =
+        baseSpeed;
+
+
+    if (
+        nitroActive &&
+        nitroAmount > 0
+    ) {
+
+        currentSpeed =
+            baseSpeed * 1.8;
+
+
+        nitroAmount -=
+            delta * .035;
+
+    } else {
+
+        nitroAmount +=
+            delta * .008;
+    }
+
+
+    nitroAmount =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                nitroAmount
+            )
+        );
+
+
+    if (
+        nitroAmount <= 0
+    ) {
+
+        stopNitro();
+    }
+
+
+    /* =====================================================
+       SPAWN
+    ===================================================== */
+
+    spawnTimer += delta;
+
+
+    const spawnDelay =
+        Math.max(
+            400,
+            850 -
+            level * 30
+        );
+
+
+    if (
+        spawnTimer >
+        spawnDelay
+    ) {
+
+        createEnemy();
+
+        spawnTimer = 0;
+    }
+
+
+    /* =====================================================
+       ENEMY
+    ===================================================== */
+
+    for (
+        let i =
+            enemies.length - 1;
+
+        i >= 0;
+
+        i--
+    ) {
+
+        const enemy =
+            enemies[i];
+
+
+        /*
+           Atas → bawah.
+        */
+
+        enemy.y +=
+            currentSpeed *
+            enemy.speed *
+            delta /
+            16;
+
+
+        /*
+           Gerakan samping.
+        */
+
+        enemy.x +=
+            enemy.directionX *
+            enemy.horizontalSpeed *
+            delta /
+            16;
+
+
+        if (
+            enemy.x >
+            enemy.startX +
+            enemy.moveRange
+        ) {
+
+            enemy.directionX =
+                -1;
+        }
+
+
+        if (
+            enemy.x <
+            enemy.startX -
+            enemy.moveRange
+        ) {
+
+            enemy.directionX =
+                1;
+        }
+
+
+        /*
+           Batas jalan.
+        */
+
+        const minX = 35;
+
+        const maxX =
+            game.clientWidth -
+            93;
+
+
+        if (
+            enemy.x <
+            minX
+        ) {
+
+            enemy.x =
+                minX;
+
+            enemy.directionX =
+                1;
+        }
+
+
+        if (
+            enemy.x >
+            maxX
+        ) {
+
+            enemy.x =
+                maxX;
+
+            enemy.directionX =
+                -1;
+        }
+
+
+        enemy.el.style.left =
+            enemy.x + "px";
+
+        enemy.el.style.top =
+            enemy.y + "px";
+
+
+        /* =================================================
+           COLLISION
+        ================================================= */
+
+        if (
+            hitTest(
+                player,
+                enemy.el
+            )
+        ) {
+
+            endGame();
+
+            return;
+        }
+
+
+        /* =================================================
+           KELUAR LAYAR
+        ================================================= */
+
+        if (
+            enemy.y >
+            game.clientHeight +
+            140
+        ) {
+
+            enemy.el.remove();
+
+            enemies.splice(
+                i,
+                1
+            );
+
+
+            score++;
+
+
+            /*
+               Level naik setiap 10.
+            */
+
+            if (
+                score % 10 === 0
+            ) {
+
+                level++;
+
+                baseSpeed += .5;
+            }
+        }
+    }
+
+
+    updateHUD();
+
+
+    animation =
+        requestAnimationFrame(
+            gameLoop
+        );
+}
+
+
+/* =========================================================
+   PAUSE
+========================================================= */
+
+function togglePause() {
+
+    if (!running)
+        return;
+
+
+    paused =
+        !paused;
+
+
+    if (paused) {
+
+        moveLeft = false;
+        moveRight = false;
+
+        stopNitro();
+
+        pauseScreen.style.display =
+            "flex";
+
+    } else {
+
+        pauseScreen.style.display =
+            "none";
+
+        lastTime =
+            performance.now();
+    }
+}
+
+
+pauseButton.addEventListener(
+    "click",
+    togglePause
+);
+
+
+resumeButton.addEventListener(
+    "click",
+    togglePause
+);
+
+
+/* =========================================================
+   GAME OVER
+========================================================= */
+
+function endGame() {
+
+    running = false;
+
+    paused = false;
+
+    moveLeft = false;
+
+    moveRight = false;
+
+    stopNitro();
+
+
+    cancelAnimationFrame(
+        animation
+    );
+
+
+    /*
+       Efek tabrakan.
+    */
+
+    game.classList.add(
+        "crashFlash"
+    );
+
+
+    setTimeout(
+        () => {
+
+            game.classList.remove(
+                "crashFlash"
+            );
+
+        },
+        600
+    );
+
+
+    /*
+       Getar HP jika tersedia.
+    */
+
+    if (
+        navigator.vibrate
+    ) {
+
+        navigator.vibrate(
+            [120, 80, 200]
+        );
+    }
+
+
+    /*
+       High score.
+    */
+
+    if (
+        score >
+        highScore
+    ) {
+
+        highScore =
+            score;
+
+        localStorage.setItem(
+            HIGH_SCORE_KEY,
+            highScore
+        );
+    }
+
+
+    finalScore.textContent =
+        score;
+
+    finalHighScore.textContent =
+        highScore;
+
+
+    highScoreText.textContent =
+        highScore;
+
+
+    gameOver.style.display =
+        "flex";
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+startButton.addEventListener(
+    "click",
+    startGame
+);
+
+
+restartButton.addEventListener(
+    "click",
+    startGame
+);
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        if (!running)
+            return;
+
+
+        const minX = 28;
+
+        const maxX =
+            game.clientWidth -
+            PLAYER_WIDTH -
+            28;
+
+
+        targetX =
+            Math.max(
+                minX,
+                Math.min(
+                    maxX,
+                    targetX
+                )
+            );
+
+    }
+);
+
+
+/* =========================================================
+   CEGAH GESTURE BROWSER
+========================================================= */
+
+document.addEventListener(
+    "gesturestart",
+    event => {
+        event.preventDefault();
+    }
+);
+
+
+document.addEventListener(
+    "gesturechange",
+    event => {
+        event.preventDefault();
+    }
+);
+
+
+document.addEventListener(
+    "gestureend",
+    event => {
+        event.preventDefault();
+    }
+);
+
+
+/*
+   Cegah double tap zoom.
+*/
+
+let lastTap = 0;
+
+document.addEventListener(
+    "touchend",
+    event => {
+
+        const now =
+            Date.now();
+
+
+        if (
+            now - lastTap <
+            300
+        ) {
+
+            event.preventDefault();
+        }
+
+
+        lastTap = now;
+    },
+    {
+        passive: false
+    }
+);
+
+
+/* =========================================================
+   INITIAL HUD
+========================================================= */
+
+updateHUD();
+</script>
+
+</body>
+</html>
